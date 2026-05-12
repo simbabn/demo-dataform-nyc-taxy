@@ -1,0 +1,22 @@
+name: release-${env}-${app_name}
+git_commitish: ${git_commitish}
+region: ${region}
+project: ${process_project}
+repository:
+  name: ${dataform_repository_name}
+code_compilation_config:
+  default_database: ${marketplace_project}
+  default_schema: ${marts_dataset}
+  default_location: ${bigquery_location}
+  assertion_schema: ${assertions_dataset}
+  vars:
+    env: ${env}
+    app_name: ${app_name}
+    raw_project_id: ${raw_project}
+    process_project_id: ${process_project}
+    marketplace_project_id: ${marketplace_project}
+    raw_dataset: ${raw_dataset}
+    staging_dataset: ${staging_dataset}
+    marts_dataset: ${marts_dataset}
+    assertions_dataset: ${assertions_dataset}
+    nyc_taxi_source_table: ${nyc_taxi_source_table}

@@ -1,0 +1,57 @@
+config {
+  type: "table",
+  database: constants.proc_project_id,
+  schema: constants.staging_dataset,
+  name: "stg_yellow_trips_001",
+  description: "Cleaned yellow taxi trips with basic business filters.",
+  tags: ["staging", "daily", "nyc_taxi"],
+  uniqueKey: ["trip_id"],
+  bigquery: {
+    partitionBy: "DATE(pickup_datetime)",
+    clusterBy: ["pickup_location_id", "dropoff_location_id"]
+  },
+  columns: {
+    trip_id: "Deterministic trip identifier.",
+    taxi_type: "Taxi service type.",
+    pickup_datetime: "Trip pickup timestamp.",
+    dropoff_datetime: "Trip dropoff timestamp.",
+    pickup_date: "Trip pickup date.",
+    trip_duration_minutes: "Trip duration in minutes.",
+    passenger_count: "Passenger count.",
+    trip_distance: "Trip distance in miles.",
+    fare_amount: "Meter fare amount.",
+    tip_amount: "Tip amount.",
+    total_amount: "Total charged amount.",
+    pickup_location_id: "Pickup taxi zone id.",
+    dropoff_location_id: "Dropoff taxi zone id.",
+    payment_type: "Payment type.",
+    source_year: "Source table year.",
+    insertion_time: "Insertion time."
+  }
+}
+
+select
+  trip_id,
+  taxi_type,
+  pickup_datetime,
+  dropoff_datetime,
+  date(pickup_datetime) as pickup_date,
+  timestamp_diff(dropoff_datetime, pickup_datetime, minute) as trip_duration_minutes,
+  passenger_count,
+  trip_distance,
+  fare_amount,
+  tip_amount,
+  total_amount,
+  pickup_location_id,
+  dropoff_location_id,
+  payment_type,
+  source_year,
+  current_timestamp() as insertion_time
+from ${ref("yellow_trips_001")}
+where pickup_datetime is not null
+  and dropoff_datetime is not null
+  and dropoff_datetime > pickup_datetime
+  and trip_distance >= 0
+  and total_amount >= 0
+  and pickup_location_id is not null
+  and dropoff_location_id is not null

@@ -1,0 +1,14 @@
+name: workflow-${env}-${app_name}-daily
+project: ${process_project}
+region: ${region}
+repository:
+  name: ${dataform_repository_name}
+release_config: ${dataform_release_config_name}
+cron_schedule: 30 5 * * *
+timezone: Europe/Paris
+invocation_config:
+  included_tags:
+    - daily
+  transitive_dependencies_included: true
+  transitive_dependents_included: false
+  fully_refresh_incremental_tables_enabled: false

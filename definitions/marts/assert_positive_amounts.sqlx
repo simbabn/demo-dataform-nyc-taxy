@@ -1,0 +1,10 @@
+config {
+  type: "assertion",
+  tags: ["assertions", "daily", "nyc_taxi"]
+}
+
+select
+  trip_id,
+  total_amount
+from ${ref("fct_trips_001")}
+where total_amount < 0

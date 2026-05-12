@@ -1,0 +1,27 @@
+config {
+  type: "table",
+  database: constants.proc_project_id,
+  schema: constants.staging_dataset,
+  name: "stg_taxi_zones_001",
+  description: "Taxi zone ids derived from loaded yellow taxi trips.",
+  tags: ["staging", "daily", "nyc_taxi"],
+  uniqueKey: ["zone_id"],
+  columns: {
+    zone_id: "Taxi zone identifier.",
+    borough: "NYC borough placeholder.",
+    zone_name: "Taxi zone name placeholder.",
+    insertion_time: "Insertion time."
+  }
+}
+
+select
+  zone_id,
+  cast(null as string) as borough,
+  concat("Zone ", cast(zone_id as string)) as zone_name,
+  current_timestamp() as insertion_time
+from (
+  select pickup_location_id as zone_id from ${ref("stg_yellow_trips_001")}
+  union distinct
+  select dropoff_location_id as zone_id from ${ref("stg_yellow_trips_001")}
+)
+where zone_id is not null

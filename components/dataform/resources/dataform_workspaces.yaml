@@ -1,0 +1,5 @@
+name: workspace-${env}-${app_name}
+project: ${process_project}
+region: ${region}
+repository:
+  name: ${dataform_repository_name}

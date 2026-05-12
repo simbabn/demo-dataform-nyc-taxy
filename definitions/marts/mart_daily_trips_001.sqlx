@@ -1,0 +1,51 @@
+config {
+  type: "table",
+  database: constants.mkp_project_id,
+  schema: constants.marts_dataset,
+  name: "mart_daily_trips_001",
+  description: "Daily KPI table for NYC yellow taxi trips, ready for Looker Studio.",
+  tags: ["marts", "daily", "nyc_taxi"],
+  uniqueKey: ["pickup_date", "pickup_location_id"],
+  bigquery: {
+    partitionBy: "pickup_date",
+    clusterBy: ["pickup_location_id"]
+  },
+  columns: {
+    pickup_date: "Trip pickup date.",
+    pickup_location_id: "Pickup taxi zone id.",
+    pickup_borough: "Pickup borough.",
+    pickup_zone_name: "Pickup zone name.",
+    trip_count: "Number of trips.",
+    passenger_count: "Total passenger count.",
+    total_distance: "Total distance in miles.",
+    avg_trip_distance: "Average trip distance in miles.",
+    total_fare_amount: "Total fare amount.",
+    total_tip_amount: "Total tip amount.",
+    total_amount: "Total charged amount.",
+    avg_total_amount: "Average charged amount.",
+    insertion_time: "Insertion time."
+  }
+}
+
+select
+  trips.pickup_date,
+  trips.pickup_location_id,
+  zones.borough as pickup_borough,
+  zones.zone_name as pickup_zone_name,
+  count(*) as trip_count,
+  sum(coalesce(trips.passenger_count, 0)) as passenger_count,
+  sum(trips.trip_distance) as total_distance,
+  avg(trips.trip_distance) as avg_trip_distance,
+  sum(trips.fare_amount) as total_fare_amount,
+  sum(trips.tip_amount) as total_tip_amount,
+  sum(trips.total_amount) as total_amount,
+  avg(trips.total_amount) as avg_total_amount,
+  current_timestamp() as insertion_time
+from ${ref("fct_trips_001")} as trips
+left join ${ref("dim_taxi_zone_001")} as zones
+  on trips.pickup_location_id = zones.zone_id
+group by
+  trips.pickup_date,
+  trips.pickup_location_id,
+  zones.borough,
+  zones.zone_name

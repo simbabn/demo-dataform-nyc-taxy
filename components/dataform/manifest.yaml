@@ -1,0 +1,4 @@
+name: dataform
+description: Dataform repository, release config and daily workflow for NYC taxi transformations.
+depends_on:
+  - bigquery

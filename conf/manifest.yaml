@@ -1,0 +1,23 @@
+app_name: nyctaxi
+project_type: analytics-demo
+region: europe-west9
+bigquery_location: EU
+github_repo: ALTEN/demo-dataform-nyc-taxy
+git_commitish: main
+
+# Keep this false until the SSH private key has been added as a Secret Manager
+# secret version. The Terraform module still creates a usable Dataform repository.
+dataform_enable_git_remote: true
+
+apis:
+  - bigquery.googleapis.com
+  - bigquerydatatransfer.googleapis.com
+  - cloudscheduler.googleapis.com
+  - run.googleapis.com
+  - dataform.googleapis.com
+  - iam.googleapis.com
+  - iamcredentials.googleapis.com
+  - secretmanager.googleapis.com
+  - serviceusage.googleapis.com
+  - storage.googleapis.com
+  - workflows.googleapis.com

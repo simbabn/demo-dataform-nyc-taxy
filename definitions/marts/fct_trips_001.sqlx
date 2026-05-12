@@ -1,0 +1,46 @@
+config {
+  type: "table",
+  database: constants.mkp_project_id,
+  schema: constants.marts_dataset,
+  name: "fct_trips_001",
+  description: "Fact table for cleaned NYC yellow taxi trips.",
+  tags: ["marts", "daily", "nyc_taxi"],
+  uniqueKey: ["trip_id"],
+  bigquery: {
+    partitionBy: "pickup_date",
+    clusterBy: ["pickup_location_id", "dropoff_location_id"]
+  },
+  columns: {
+    trip_id: "Deterministic trip identifier.",
+    taxi_type: "Taxi service type.",
+    pickup_datetime: "Trip pickup timestamp.",
+    dropoff_datetime: "Trip dropoff timestamp.",
+    pickup_date: "Trip pickup date.",
+    pickup_location_id: "Pickup taxi zone id.",
+    dropoff_location_id: "Dropoff taxi zone id.",
+    trip_duration_minutes: "Trip duration in minutes.",
+    passenger_count: "Passenger count.",
+    trip_distance: "Trip distance in miles.",
+    fare_amount: "Meter fare amount.",
+    tip_amount: "Tip amount.",
+    total_amount: "Total charged amount.",
+    insertion_time: "Insertion time."
+  }
+}
+
+select
+  trip_id,
+  taxi_type,
+  pickup_datetime,
+  dropoff_datetime,
+  pickup_date,
+  pickup_location_id,
+  dropoff_location_id,
+  trip_duration_minutes,
+  passenger_count,
+  trip_distance,
+  fare_amount,
+  tip_amount,
+  total_amount,
+  current_timestamp() as insertion_time
+from ${ref("stg_yellow_trips_001")}

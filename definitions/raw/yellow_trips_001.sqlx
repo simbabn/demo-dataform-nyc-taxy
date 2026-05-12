@@ -1,0 +1,70 @@
+config {
+  type: "incremental",
+  database: constants.raw_project_id,
+  schema: constants.raw_dataset,
+  name: "yellow_trips_001",
+  description: "Normalized raw yellow taxi trips loaded from official NYC TLC Parquet files in the EU landing dataset.",
+  tags: ["raw", "daily", "nyc_taxi"],
+  bigquery: {
+    partitionBy: "DATE(pickup_datetime)",
+    clusterBy: ["pickup_location_id", "dropoff_location_id"]
+  },
+  columns: {
+    taxi_type: "Taxi service type.",
+    trip_id: "Deterministic trip identifier generated from trip attributes.",
+    vendor_id: "TLC vendor identifier.",
+    pickup_datetime: "Trip pickup timestamp.",
+    dropoff_datetime: "Trip dropoff timestamp.",
+    passenger_count: "Passenger count reported by the driver.",
+    trip_distance: "Trip distance in miles.",
+    rate_code: "Rate code.",
+    payment_type: "Payment type.",
+    fare_amount: "Meter fare amount.",
+    extra: "Extra charges.",
+    mta_tax: "MTA tax.",
+    tip_amount: "Tip amount.",
+    tolls_amount: "Tolls amount.",
+    imp_surcharge: "Improvement surcharge.",
+    total_amount: "Total charged amount.",
+    pickup_location_id: "Pickup taxi zone id.",
+    dropoff_location_id: "Dropoff taxi zone id.",
+    source_year: "Source table year.",
+    insertion_time: "Insertion time."
+  }
+}
+
+js {
+  const source = `\`${constants.raw_project_id}.${constants.raw_dataset}.${constants.nyc_taxi_source_table}\``;
+}
+
+select
+  "yellow" as taxi_type,
+  to_hex(md5(to_json_string(struct(
+    VendorID,
+    tpep_pickup_datetime,
+    tpep_dropoff_datetime,
+    PULocationID,
+    DOLocationID,
+    total_amount
+  )))) as trip_id,
+  safe_cast(VendorID as string) as vendor_id,
+  timestamp(tpep_pickup_datetime) as pickup_datetime,
+  timestamp(tpep_dropoff_datetime) as dropoff_datetime,
+  safe_cast(passenger_count as int64) as passenger_count,
+  safe_cast(trip_distance as numeric) as trip_distance,
+  safe_cast(RatecodeID as string) as rate_code,
+  safe_cast(payment_type as string) as payment_type,
+  safe_cast(fare_amount as numeric) as fare_amount,
+  safe_cast(extra as numeric) as extra,
+  safe_cast(mta_tax as numeric) as mta_tax,
+  safe_cast(tip_amount as numeric) as tip_amount,
+  safe_cast(tolls_amount as numeric) as tolls_amount,
+  safe_cast(improvement_surcharge as numeric) as imp_surcharge,
+  safe_cast(total_amount as numeric) as total_amount,
+  safe_cast(PULocationID as int64) as pickup_location_id,
+  safe_cast(DOLocationID as int64) as dropoff_location_id,
+  extract(year from timestamp(tpep_pickup_datetime)) as source_year,
+  current_timestamp() as insertion_time
+from ${source}
+where tpep_pickup_datetime is not null
+${when(incremental(), `and timestamp(tpep_pickup_datetime) > (select coalesce(max(pickup_datetime), timestamp("1970-01-01")) from ${self()})`)}

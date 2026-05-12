@@ -1,0 +1,5 @@
+defaultProject: ${dataform.projectConfig.vars.marketplace_project_id}
+defaultDataset: ${dataform.projectConfig.vars.marts_dataset}
+defaultLocation: EU
+defaultAssertionDataset: ${dataform.projectConfig.vars.assertions_dataset}
+dataformCoreVersion: 3.0.0

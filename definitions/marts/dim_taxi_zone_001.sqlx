@@ -1,0 +1,24 @@
+config {
+  type: "table",
+  database: constants.mkp_project_id,
+  schema: constants.marts_dataset,
+  name: "dim_taxi_zone_001",
+  description: "Taxi zone dimension for Looker Studio.",
+  tags: ["marts", "daily", "nyc_taxi"],
+  uniqueKey: ["zone_id"],
+  columns: {
+    zone_id: "Taxi zone identifier.",
+    borough: "NYC borough.",
+    zone_name: "Taxi zone name.",
+    zone_label: "Human-readable taxi zone label.",
+    insertion_time: "Insertion time."
+  }
+}
+
+select
+  zone_id,
+  borough,
+  zone_name,
+  concat(borough, " - ", zone_name) as zone_label,
+  current_timestamp() as insertion_time
+from ${ref("stg_taxi_zones_001")}
