@@ -16,7 +16,7 @@ locals {
   nyc_taxi_source   = local.env_config.nyc_taxi_source
   enabled_api_matrix = flatten([
     for project in distinct(values(local.project_list)) : [
-      for api in local.manifest.apis : {
+      for api in local.manifest.enabled_services : {
         key     = "${project}/${api}"
         project = project
         api     = api

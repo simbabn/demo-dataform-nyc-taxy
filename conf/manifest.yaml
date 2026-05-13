@@ -1,5 +1,5 @@
 app_name: nyctaxi
-project_type: analytics-demo
+project_type: usecase
 region: europe-west9
 bigquery_location: EU
 github_repo: simbabn/demo-dataform-nyc-taxy
@@ -9,7 +9,7 @@ git_commitish: main
 # secret version. The Terraform module still creates a usable Dataform repository.
 dataform_enable_git_remote: true
 
-apis:
+enabled_services:
   - bigquery.googleapis.com
   - bigquerydatatransfer.googleapis.com
   - cloudscheduler.googleapis.com
@@ -21,3 +21,14 @@ apis:
   - serviceusage.googleapis.com
   - storage.googleapis.com
   - workflows.googleapis.com
+
+# Optional ODP/Limagrain integration fields.
+# Keep them empty until this project uses GitHub Actions Workload Identity,
+# Power BI workforce identity, central monitoring, Eventarc, resource tags,
+# or the internal group management API.
+workload_identity_pool:
+powerbi_workforce_pool:
+monitoring_topic:
+tags_project:
+core_event_bus:
+apis: {}
