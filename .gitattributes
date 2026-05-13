@@ -1,0 +1,9 @@
+* text=auto eol=lf
+
+*.md text eol=lf
+*.sqlx text eol=lf
+*.tf text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.js text eol=lf
+

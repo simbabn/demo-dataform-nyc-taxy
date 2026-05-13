@@ -5,7 +5,7 @@ bigquery_location: EU
 github_repo: simbabn/demo-dataform-nyc-taxy
 git_commitish: main
 
-# Keep this false until the SSH private key has been added as a Secret Manager
+# Set this to false when no SSH private key has been added as a Secret Manager
 # secret version. The Terraform module still creates a usable Dataform repository.
 dataform_enable_git_remote: true
 

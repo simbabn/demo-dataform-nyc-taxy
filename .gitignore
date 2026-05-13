@@ -1,7 +1,9 @@
 .terraform/
+.terraform.lock.hcl.backup
 *.tfstate
 *.tfstate.*
 *.tfplan
+tfplan
 crash.log
 crash.*.log
 override.tf
@@ -9,3 +11,9 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 .DS_Store
+.idea/
+.vscode/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
