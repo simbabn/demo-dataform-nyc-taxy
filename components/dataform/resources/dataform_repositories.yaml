@@ -5,4 +5,4 @@ enable_git_remote: ${dataform_enable_git_remote}
 git:
   url: git@github.com:${github_repo}.git
   default_branch: main
-  host_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI8W6B9E3ZcJQdZBVpCwvYULgDBd1w8EX4h2sCxW2OxsM
+  host_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
