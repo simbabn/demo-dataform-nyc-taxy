@@ -1,5 +1,16 @@
-defaultProject: ${dataform.projectConfig.vars.marketplace_project_id}
-defaultDataset: ${dataform.projectConfig.vars.marts_dataset}
+defaultProject: aqueous-heading-496010-q7
+defaultDataset: ds_dev_nyctaxi_marts
 defaultLocation: EU
-defaultAssertionDataset: ${dataform.projectConfig.vars.assertions_dataset}
+defaultAssertionDataset: ds_dev_nyctaxi_assertions
 dataformCoreVersion: 3.0.0
+vars:
+  env: dev
+  app_name: nyctaxi
+  raw_project_id: aqueous-heading-496010-q7
+  process_project_id: aqueous-heading-496010-q7
+  marketplace_project_id: aqueous-heading-496010-q7
+  raw_dataset: ds_dev_nyctaxi_raw
+  staging_dataset: ds_dev_nyctaxi_staging
+  marts_dataset: ds_dev_nyctaxi_marts
+  assertions_dataset: ds_dev_nyctaxi_assertions
+  nyc_taxi_source_table: yellow_trips_source
